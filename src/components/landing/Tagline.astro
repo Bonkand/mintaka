@@ -49,10 +49,9 @@ const translatePath = useTranslatedPath(lang);
 <script>
 	import { gsap } from "gsap";
 	import { ScrollTrigger } from "gsap/ScrollTrigger";
-	import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 	import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 
-	gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin, MotionPathPlugin);
+	gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
 	function init() {
 		const linePath = document.querySelector("#tagline-arrow-path");

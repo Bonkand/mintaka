@@ -49,11 +49,10 @@ const translatePath = useTranslatedPath(lang);
 <script>
 	import { gsap } from "gsap";
 	import { ScrollTrigger } from "gsap/ScrollTrigger";
-	import { SplitText } from "gsap/SplitText";
 	import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 	import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 
-	gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin, MotionPathPlugin);
+	gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin, MotionPathPlugin);
 
 	function init() {
 		const linePath = document.querySelector("#tagline-arrow-path");
@@ -98,7 +97,7 @@ const translatePath = useTranslatedPath(lang);
 				0,
 			);
 
-		const split = new SplitText("#services-tagline", { type: "lines" });
+		const split = gsap.to(".element", { x: 100, duration: 1 });
 
 		split.lines.forEach((target) => {
 			gsap.to(target, {

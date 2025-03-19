@@ -22,7 +22,7 @@ export const ui = {
 		"hero.title.1": "troia",
 		"hero.title.2": "buttana",
 		"hero.title.3": "zoccola",
-		"hero.title.4": "bocchinara",
+		"hero.title.4": "gay",
 		"hero.subtitle":
 			"Our digital agency specializes in crafting captivating websites that convert and sell. Contact us for a free consultation.",
 		"hero.scroll": "scroll down to explore more",

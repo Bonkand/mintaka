@@ -29,121 +29,106 @@ const translatePath = useTranslatedPath(lang);
 	</div>
 	<div class="text col-span-12 flex justify-center font-light">
 		<p id="services-tagline" class="max-w-5xl text-center text-4xl md:text-5xl lg:text-7xl">
-			<div class="gradient-text">
-    {t("tagline").split(" ").map((word) => (
-      <span class="word">{word}</span>
-    ))}
-  </div>
+			<div class="gradient-text">{t("tagline")}</div>
 		</p>
 	</div>
 </div>
 
 <style>
-	.text > p > :global(div) {
-		background: linear-gradient(to right, rgb(255, 255, 255) 50%, rgb(37, 37, 37) 50%);
+	#services-tagline {
+		font-family: "Your Font Here", sans-serif; /* Replace with your font */
+		line-height: 1.2; /* Adjust line height as needed */
+	}
+
+	.gradient-text {
+		background: linear-gradient(to right, #ffffff 50%, #666666 50%);
 		background-size: 200% 100%;
 		background-position-x: 100%;
 		color: transparent;
 		background-clip: text;
 		-webkit-background-clip: text;
-		line-height: 1.2;
-	}
-
-	#services-tagline .word {
-	  display: inline-block;
- 	 margin-right: 0.25em;
-	  opacity: 0;
-	}
-
-	.gradient-text {
-  	background: linear-gradient(to right, #ffffff 50%, #666666 50%);
-  	background-size: 200% 100%;
-  	background-position-x: 100%;
-	color: transparent;
-	background-clip: text;
- 	-webkit-background-clip: text;
+		display: inline-block; /* Ensure the gradient applies correctly */
 	}
 </style>
 
 <script>
-  import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
-  import { MotionPathPlugin } from "gsap/MotionPathPlugin";
+	import { gsap } from "gsap";
+	import { ScrollTrigger } from "gsap/ScrollTrigger";
+	import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 
-  gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
+	gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
-  function init() {
-    // Animate the text (word-by-word reveal)
-    gsap.from("#services-tagline .word", {
-      opacity: 0,
-      y: 20, // Slide up from below
-      duration: 1,
-      stagger: 0.1, // Delay between each word
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: "#services-tagline",
-        start: "top 80%", // Start animation when the top of the text is 80% in view
-        end: "bottom 20%", // End animation when the bottom of the text is 20% in view
-        toggleActions: "play none none reverse", // Play animation on enter, reverse on leave
-      },
-    });
+	function init() {
+		// Animate the entire text block
+		gsap.from("#services-tagline .gradient-text", {
+			opacity: 0,
+			y: 20, // Slide up from below
+			duration: 1,
+			ease: "power2.out",
+			scrollTrigger: {
+				trigger: "#services-tagline",
+				start: "top 80%", // Start animation when the top of the text is 80% in view
+				end: "bottom 20%", // End animation when the bottom of the text is 20% in view
+				toggleActions: "play none none reverse", // Play animation on enter, reverse on leave
+			},
+		});
 
-    // Gradient animation for the text
-    gsap.to(".gradient-text", {
-      backgroundPositionX: "0%", // Animate the gradient from right to left
-      duration: 2,
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: "#services-tagline",
-        start: "top 80%",
-        end: "bottom 20%",
-        toggleActions: "play none none reverse",
-      },
-    });
+		// Gradient animation for the text
+		gsap.to(".gradient-text", {
+			backgroundPositionX: "0%", // Animate the gradient from right to left
+			duration: 2,
+			ease: "power2.out",
+			scrollTrigger: {
+				trigger: "#services-tagline",
+				start: "top 80%",
+				end: "bottom 20%",
+				toggleActions: "play none none reverse",
+			},
+		});
 
-    // Existing arrow animation code
-    const linePath = document.querySelector("#tagline-arrow-path");
-    gsap.set(linePath, { drawSVG: 0 });
+		// Existing arrow animation code
+		const linePath = document.querySelector("#tagline-arrow-path");
+		gsap.set(linePath, { drawSVG: 0 });
 
-    let otherQTl = gsap
-      .timeline({
-        scrollTrigger: {
-          trigger: ".tagline-arrows",
-          start: "center bottom",
-          end: "center center",
-          markers: false,
-          scrub: 1,
-        },
-      })
-      .to(
-        linePath,
-        {
-          drawSVG: "100%",
-        },
-        "<",
-      )
-      .to(
-        "#tagline-arrow",
-        {
-          opacity: 1,
-          duration: 0.1,
-        },
-        "<",
-      )
-      .to(
-        "#tagline-arrow",
-        {
-          motionPath: {
-            path: "#tagline-arrow-path",
-            align: "#tagline-arrow-path",
-            alignOrigin: [0.5, 0.5],
-            autoRotate: 30,
-          },
-        },
-        0,
-      );
-  }
+		let otherQTl = gsap
+			.timeline({
+				scrollTrigger: {
+					trigger: ".tagline-arrows",
+					start: "center bottom",
+					end: "center center",
+					markers: false,
+					scrub: 1,
+				},
+			})
+			.to(
+				linePath,
+				{
+					drawSVG: "100%",
+				},
+				"<",
+			)
+			.to(
+				"#tagline-arrow",
+				{
+					opacity: 1,
+					duration: 0.1,
+				},
+				"<",
+			)
+			.to(
+				"#tagline-arrow",
+				{
+					motionPath: {
+						path: "#tagline-arrow-path",
+						align: "#tagline-arrow-path",
+						alignOrigin: [0.5, 0.5],
+						autoRotate: 30,
+					},
+				},
+				0,
+			);
+	}
 
-  document.removeEventListener("DOMContentLoaded", init); // astro:page-load
-  document.addEventListener("DOMContentLoaded", init); // astro:page-load
+	document.removeEventListener("DOMContentLoaded", init); // astro:page-load
+	document.addEventListener("DOMContentLoaded", init); // astro:page-load
 </script>

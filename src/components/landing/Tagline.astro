@@ -29,7 +29,7 @@ const translatePath = useTranslatedPath(lang);
 	</div>
 	<div class="text col-span-12 flex justify-center font-light">
 		<p id="services-tagline" class="max-w-5xl text-center text-4xl md:text-5xl lg:text-7xl">
-			<div class="gradient-text">{t("tagline")}</div>
+			<span class="gradient-text">{t("tagline")}</span>
 		</p>
 	</div>
 </div>
@@ -48,6 +48,7 @@ const translatePath = useTranslatedPath(lang);
 		background-clip: text;
 		-webkit-background-clip: text;
 		display: inline-block; /* Ensure the gradient applies correctly */
+		font-size: inherit; /* Inherit the font size from the parent */
 	}
 </style>
 

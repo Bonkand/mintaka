@@ -29,7 +29,11 @@ const translatePath = useTranslatedPath(lang);
 	</div>
 	<div class="text col-span-12 flex justify-center font-light">
 		<p id="services-tagline" class="max-w-5xl text-center text-4xl md:text-5xl lg:text-7xl">
-			{t("tagline")}
+			<div class="gradient-text">
+    {t("tagline").split(" ").map((word) => (
+      <span class="word">{word}</span>
+    ))}
+  </div>
 		</p>
 	</div>
 </div>
@@ -44,75 +48,102 @@ const translatePath = useTranslatedPath(lang);
 		-webkit-background-clip: text;
 		line-height: 1.2;
 	}
+
+	#services-tagline .word {
+	  display: inline-block;
+ 	 margin-right: 0.25em;
+	  opacity: 0;
+	}
+
+	.gradient-text {
+  	background: linear-gradient(to right, #ffffff 50%, #666666 50%);
+  	background-size: 200% 100%;
+  	background-position-x: 100%;
+	color: transparent;
+	background-clip: text;
+ 	-webkit-background-clip: text;
+	}
 </style>
 
 <script>
-	import { gsap } from "gsap";
-	import { ScrollTrigger } from "gsap/ScrollTrigger";
-	import { MotionPathPlugin } from "gsap/MotionPathPlugin";
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 
-	gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
+  gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
-	function init() {
-		const linePath = document.querySelector("#tagline-arrow-path");
+  function init() {
+    // Animate the text (word-by-word reveal)
+    gsap.from("#services-tagline .word", {
+      opacity: 0,
+      y: 20, // Slide up from below
+      duration: 1,
+      stagger: 0.1, // Delay between each word
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: "#services-tagline",
+        start: "top 80%", // Start animation when the top of the text is 80% in view
+        end: "bottom 20%", // End animation when the bottom of the text is 20% in view
+        toggleActions: "play none none reverse", // Play animation on enter, reverse on leave
+      },
+    });
 
-		gsap.set(linePath, { drawSVG: 0 });
+    // Gradient animation for the text
+    gsap.to(".gradient-text", {
+      backgroundPositionX: "0%", // Animate the gradient from right to left
+      duration: 2,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: "#services-tagline",
+        start: "top 80%",
+        end: "bottom 20%",
+        toggleActions: "play none none reverse",
+      },
+    });
 
-		let otherQTl = gsap
-			.timeline({
-				scrollTrigger: {
-					trigger: ".tagline-arrows",
-					start: "center bottom",
-					end: "center center",
-					markers: false,
-					scrub: 1,
-				},
-			})
-			.to(
-				linePath,
-				{
-					drawSVG: "100%",
-				},
-				"<",
-			)
-			.to(
-				"#tagline-arrow",
-				{
-					opacity: 1,
-					duration: 0.1,
-				},
-				"<",
-			)
-			.to(
-				"#tagline-arrow",
-				{
-					motionPath: {
-						path: "#tagline-arrow-path",
-						align: "#tagline-arrow-path",
-						alignOrigin: [0.5, 0.5],
-						autoRotate: 30,
-					},
-				},
-				0,
-			);
+    // Existing arrow animation code
+    const linePath = document.querySelector("#tagline-arrow-path");
+    gsap.set(linePath, { drawSVG: 0 });
 
-		const split = gsap.to(".element", { x: 100, duration: 1 });
+    let otherQTl = gsap
+      .timeline({
+        scrollTrigger: {
+          trigger: ".tagline-arrows",
+          start: "center bottom",
+          end: "center center",
+          markers: false,
+          scrub: 1,
+        },
+      })
+      .to(
+        linePath,
+        {
+          drawSVG: "100%",
+        },
+        "<",
+      )
+      .to(
+        "#tagline-arrow",
+        {
+          opacity: 1,
+          duration: 0.1,
+        },
+        "<",
+      )
+      .to(
+        "#tagline-arrow",
+        {
+          motionPath: {
+            path: "#tagline-arrow-path",
+            align: "#tagline-arrow-path",
+            alignOrigin: [0.5, 0.5],
+            autoRotate: 30,
+          },
+        },
+        0,
+      );
+  }
 
-		split.lines.forEach((target) => {
-			gsap.to(target, {
-				backgroundPositionX: 0,
-				ease: "none",
-				scrollTrigger: {
-					trigger: target,
-					markers: false,
-					scrub: 1,
-					start: "top bottom-=20%",
-					end: "bottom bottom-=10%",
-				},
-			});
-		});
-	}
-
-	document.removeEventListener("DOMContentLoaded", init); // astro:page-load
-	document.addEventListener("DOMContentLoaded", init); // astro:page-load
+  document.removeEventListener("DOMContentLoaded", init); // astro:page-load
+  document.addEventListener("DOMContentLoaded", init); // astro:page-load
 </script>

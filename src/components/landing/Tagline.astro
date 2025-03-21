@@ -41,9 +41,9 @@ const translatePath = useTranslatedPath(lang);
 	}
 
 	.gradient-text {
-		background: linear-gradient(to right, #ffffff 50%, #666666 50%);
-		background-size: 200% 100%;
-		background-position-x: 100%;
+		background: linear-gradient(to bottom, #ffffff 50%, #666666 50%); /* Vertical gradient */
+		background-size: 100% 200%; /* Double the height for animation */
+		background-position-y: 100%; /* Start at the bottom */
 		color: transparent;
 		background-clip: text;
 		-webkit-background-clip: text;
@@ -74,9 +74,9 @@ const translatePath = useTranslatedPath(lang);
 			},
 		});
 
-		// Gradient animation for the text
+		// Vertical gradient animation for the text
 		gsap.to(".gradient-text", {
-			backgroundPositionX: "0%", // Animate the gradient from right to left
+			backgroundPositionY: "0%", // Animate the gradient from bottom to top
 			duration: 2,
 			ease: "power2.out",
 			scrollTrigger: {

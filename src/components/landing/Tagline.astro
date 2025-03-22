@@ -12,7 +12,7 @@ const t = useTranslations(lang);
       viewBox="0 0 550 330" 
       class="h-[25rem] w-[25rem] md:w-[30rem]"
     >
-      <!-- Line (path) -->
+      <!-- Line Path -->
       <path
         id="tagline-path"
         fill="none"
@@ -22,11 +22,12 @@ const t = useTranslations(lang);
         d="M8.5,7.8C46.3,67,121.7,185.5,265.5,185.9c42.8,0.1,120.5-55.9-25.2-120.3C79-5.8,177.6,164.1,222.3,207.7c59.1,49.9,83.8,62.1,162.6,96.8"
       ></path>
       
-      <!-- Triangle -->
+      <!-- Triangle/Arrow -->
       <path
         id="tagline-arrow"
         stroke="white"
-        fill="white"
+        stroke-width="12"
+        fill="none"
         opacity="0"
         d="M465.7 172.9l47.1 6-29.8 33.3-17.3-39.3z"
       ></path>
@@ -47,16 +48,15 @@ const t = useTranslations(lang);
 
   gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
-  // SIMPLE SCROLL-BASED ANIMATION
   document.addEventListener("DOMContentLoaded", () => {
     const line = document.querySelector("#tagline-path");
     const arrow = document.querySelector("#tagline-arrow");
 
-    // Reset initial state
+    // Initial setup
     gsap.set([line, arrow], { opacity: 0 });
     gsap.set(line, { drawSVG: "0%" });
 
-    // Single timeline for all animations
+    // Animation timeline
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: ".tagline-arrows",
@@ -66,21 +66,27 @@ const t = useTranslations(lang);
       }
     });
 
-    // Line draws + fades in
+    // Line animation
     tl.to(line, {
       drawSVG: "100%",
       opacity: 1,
       duration: 2
     });
 
-    // Arrow follows path + fades in
+    // Arrow animation
     tl.to(arrow, {
       opacity: 1,
+      duration: 0.5
+    }, "<")
+    .to(arrow, {
       motionPath: {
         path: "#tagline-path",
         align: "path",
-        autoRotate: 90,
+        autoRotate: 30,
+        start: 0,
+        end: 1
       },
-    }, "<"); // Start with line animation
+      ease: "none"
+    }, "<");
   });
 </script>

@@ -220,10 +220,9 @@ const faqs = [
 		});
 
 		// Animate the arrow along the path
-		const linePath = document.querySelector("#faq-more-question-path");
 		const arrow = document.querySelector("#faq-arrow"); // Target the arrow
+		const path = document.querySelector("#faq-more-question-path"); // Target the path
 
-		gsap.set(linePath, { drawSVG: 0 });
 		gsap.set(arrow, { opacity: 0 }); // Start with the arrow hidden
 
 		let otherQTl = gsap
@@ -241,14 +240,6 @@ const faqs = [
 				duration: 0.5,
 			})
 			.to(
-				linePath,
-				{
-					drawSVG: "100%",
-					duration: 2,
-				},
-				"<",
-			)
-			.to(
 				arrow,
 				{
 					opacity: 1,
@@ -260,8 +251,8 @@ const faqs = [
 				arrow,
 				{
 					motionPath: {
-						path: "#faq-more-question-path",
-						align: "#faq-more-question-path",
+						path: path,
+						align: path,
 						alignOrigin: [0.5, 0.5],
 						autoRotate: true, // Make the arrow rotate along the path
 					},

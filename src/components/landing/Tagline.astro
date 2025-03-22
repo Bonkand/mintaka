@@ -12,15 +12,15 @@ const translatePath = useTranslatedPath(lang);
 	<div class="tagline-arrows">
 		<svg
 			stroke-linecap="round"
-			class="h-[15rem] w-[15rem] rotate-45 md:w-[20rem] md:rotate-0 lg:w-[25rem]"
+			class="h-[20rem] w-[20rem] rotate-45 md:w-[25rem] md:rotate-0 lg:w-[30rem]" <!-- Increased size -->
 			stroke-linejoin="round"
-			viewBox="0 0 550 330">
+			viewBox="0 0 550 330"> <!-- Original viewBox -->
 			<!-- Line Path -->
 			<path
 				id="tagline-arrow-path"
 				fill="none"
 				stroke="#fff"
-				stroke-width="10"
+				stroke-width="12" <!-- Increased stroke width to match triangle -->
 				opacity="0"
 				d="M8.5,7.8C46.3,67,121.7,185.5,265.5,185.9c42.8,0.1,120.5-55.9-25.2-120.3C79-5.8,177.6,164.1,222.3,207.7c59.1,49.9,83.8,62.1,162.6,96.8">
 			</path>
@@ -64,26 +64,24 @@ const translatePath = useTranslatedPath(lang);
 	import { ScrollTrigger } from "gsap/ScrollTrigger";
 	import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 
-	// Register GSAP plugins
 	gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
 	function init() {
-		// Text animation
+		// Text animation (unchanged)
 		gsap.from("#services-tagline .gradient-text", {
 			opacity: 0,
 			y: 20,
 			duration: 1,
 			ease: "power2.out",
 			scrollTrigger: {
-      				trigger: "#services-tagline",
-                                markers: true,
+				trigger: "#services-tagline",
 				start: "top 80%",
 				end: "bottom 20%",
 				toggleActions: "play none none reverse",
 			},
 		});
 
-		// Gradient animation
+		// Gradient animation (unchanged)
 		gsap.to(".gradient-text", {
 			backgroundPositionY: "0%",
 			duration: 2,
@@ -101,9 +99,9 @@ const translatePath = useTranslatedPath(lang);
 		const arrow = document.querySelector("#tagline-arrow");
 
 		// Initial setup
-		gsap.set(linePath, {
-			drawSVG: "0%",
-			opacity: 0
+		gsap.set(linePath, { 
+			drawSVG: "0%", 
+			opacity: 0 
 		});
 
 		gsap.set(arrow, {
@@ -112,7 +110,7 @@ const translatePath = useTranslatedPath(lang);
 			yPercent: -50
 		});
 
-		// Main animation timeline
+		// Timeline with corrected sizing
 		const pathTimeline = gsap.timeline({
 			scrollTrigger: {
 				trigger: ".tagline-arrows",
@@ -146,7 +144,6 @@ const translatePath = useTranslatedPath(lang);
 			}, "<");
 	}
 
-	// Event listeners for Astro hydration
 	document.removeEventListener("DOMContentLoaded", init);
 	document.addEventListener("DOMContentLoaded", init);
 </script>

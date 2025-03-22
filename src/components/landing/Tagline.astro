@@ -11,7 +11,7 @@ const translatePath = useTranslatedPath(lang);
 <!-- The best thing? It's all in one -->
 <div id="smooth-wrapper" class:list={["section tagline-section relative bg-zinc-900 text-white", className]}>
 	<div class="tagline-arrows">
-		<svg
+		<svg>
 			stroke-linecap="round"
 			class="h-[15rem] w-[15rem] rotate-45 md:w-[20rem] md:rotate-0 lg:w-[25rem]"
 			stroke-linejoin="round"
@@ -51,85 +51,63 @@ const translatePath = useTranslatedPath(lang);
 		font-size: inherit; /* Inherit the font size from the parent */
 	}
 </style>
+<!-- ... (keep the rest of the Faq.astro file unchanged) -->
 
 <script>
 	import { gsap } from "gsap";
 	import { ScrollTrigger } from "gsap/ScrollTrigger";
-	import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 
-	gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
+	gsap.registerPlugin(ScrollTrigger);
 
 	function init() {
-		// Animate the entire text block
-		gsap.from("#services-tagline .gradient-text", {
-			opacity: 0,
-			y: 20, // Slide up from below
-			duration: 1,
-			ease: "power2.out",
+		// Animate the FAQ section clip-path
+		gsap.to("#faq", {
 			scrollTrigger: {
-				trigger: "#services-tagline",
-				start: "top 80%", // Start animation when the top of the text is 80% in view
-				end: "bottom 20%", // End animation when the bottom of the text is 20% in view
-				toggleActions: "play none none reverse", // Play animation on enter, reverse on leave
+				trigger: "#faq",
+				start: "bottom center",
+				end: "bottom top",
+				scrub: 1,
+				markers: false,
 			},
+			"--faq-clip": "2vw",
+			"--faq-radius": "5rem",
 		});
 
-		// Vertical gradient animation for the text
-		gsap.to(".gradient-text", {
-			backgroundPositionY: "0%", // Animate the gradient from bottom to top
-			duration: 2,
-			ease: "power2.out",
-			scrollTrigger: {
-				trigger: "#services-tagline",
-				start: "top 80%",
-				end: "bottom 20%",
-				toggleActions: "play none none reverse",
-			},
-		});
-
-		// Existing arrow animation code
-		const linePath = document.querySelector("#tagline-arrow-path");
-		gsap.set(linePath, { drawSVG: 0 });
+		// Arrow animation (same as button)
+		const arrow = document.querySelector("#faq-arrow");
+		const button = document.querySelector(".faq-contact-us-button");
 
 		let otherQTl = gsap
 			.timeline({
 				scrollTrigger: {
-					trigger: ".tagline-arrows",
-					start: "center bottom",
-					end: "center center",
+					trigger: ".faq-more-questions",
+					start: "center 90%",
+					end: "center top",
 					markers: false,
-					scrub: 1,
+					toggleActions: "play none none reverse",
 				},
 			})
+			.to(".faq-more-questions .other-question-title", {
+				opacity: 1,
+				duration: 0.5,
+			})
 			.to(
-				linePath,
-				{
-					drawSVG: "100%",
-				},
-				"<",
-			)
-			.to(
-				"#tagline-arrow",
+				arrow,
 				{
 					opacity: 1,
-					duration: 0.1,
+					duration: 0.5,
 				},
-				"<",
+				"<"
 			)
 			.to(
-				"#tagline-arrow",
+				button,
 				{
-					motionPath: {
-						path: "#tagline-arrow-path",
-						align: "#tagline-arrow-path",
-						alignOrigin: [0.5, 0.5],
-						autoRotate: 30,
-					},
+					opacity: 1,
 				},
-				0,
+				"<"
 			);
 	}
 
-	document.removeEventListener("DOMContentLoaded", init); // astro:page-load
-	document.addEventListener("DOMContentLoaded", init); // astro:page-load
+	document.removeEventListener("DOMContentLoaded", init);
+	document.addEventListener("DOMContentLoaded", init);
 </script>

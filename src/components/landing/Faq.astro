@@ -118,8 +118,6 @@ const faqs = [
 		c27.7,19.6,50.6,45.7,57.1,76.6c1.6,11.4,1.6,83.2-24.5,81.5c-34.2-1.6-44-83.2-44-106C480.9,170.1,484.2,152.2,492.3,135.8z
 		 M642.4,540.3c32.6,8.2,66.9,14.7,101.1,19.6c-24.5,40.8-48.9,81.5-71.8,123.9C663.6,634.9,657,584.3,642.4,540.3z">
 					</path>
-					<!-- Arrow -->
-					<path id="faq-arrow" stroke="white" stroke-width="12" d="M465.7 172.9l47.1 6-29.8 33.3-17.3-39.3z"></path>
 				</g>
 			</svg>
 		</div>
@@ -201,12 +199,10 @@ const faqs = [
 <script>
 	import { gsap } from "gsap";
 	import { ScrollTrigger } from "gsap/ScrollTrigger";
-	import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 
-	gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
+	gsap.to(".element", { x: 100, duration: 1 });
 
 	function init() {
-		// Animate the FAQ section clip-path
 		gsap.to("#faq", {
 			scrollTrigger: {
 				trigger: "#faq",
@@ -219,11 +215,9 @@ const faqs = [
 			"--faq-radius": "5rem",
 		});
 
-		// Animate the arrow along the path
-		const arrow = document.querySelector("#faq-arrow"); // Target the arrow
-		const path = document.querySelector("#faq-more-question-path"); // Target the path
+		const linePath = document.querySelector("#faq-more-question-path");
 
-		gsap.set(arrow, { opacity: 0 }); // Start with the arrow hidden
+		gsap.set(linePath, { drawSVG: 0 });
 
 		let otherQTl = gsap
 			.timeline({
@@ -240,22 +234,9 @@ const faqs = [
 				duration: 0.5,
 			})
 			.to(
-				arrow,
+				linePath,
 				{
-					opacity: 1,
-					duration: 0.1,
-				},
-				"<",
-			)
-			.to(
-				arrow,
-				{
-					motionPath: {
-						path: path,
-						align: path,
-						alignOrigin: [0.5, 0.5],
-						autoRotate: true, // Make the arrow rotate along the path
-					},
+					drawSVG: "100%",
 					duration: 2,
 				},
 				"<",

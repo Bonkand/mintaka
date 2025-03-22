@@ -16,14 +16,17 @@ const translatePath = useTranslatedPath(lang);
 			class="h-[15rem] w-[15rem] rotate-45 md:w-[20rem] md:rotate-0 lg:w-[25rem]"
 			stroke-linejoin="round"
 			viewBox="0 0 550 330">
+			<!-- Line path with opacity-0 to start invisible -->
 			<path
 				id="tagline-arrow-path"
 				fill="none"
 				stroke="#fff"
 				stroke-width="10"
+				class="opacity-0" <!-- Add this -->
 				d="M8.5,7.8C46.3,67,121.7,185.5,265.5,185.9c42.8,0.1,120.5-55.9-25.2-120.3
 	C79-5.8,177.6,164.1,222.3,207.7c59.1,49.9,83.8,62.1,162.6,96.8">
 			</path>
+			<!-- Triangle/arrow with opacity-0 to start invisible -->
 			<path class="opacity-0" id="tagline-arrow" stroke="white" stroke-width="12" d="M465.7 172.9l47.1 6-29.8 33.3-17.3-39.3z"></path>
 		</svg>
 	</div>
@@ -87,7 +90,7 @@ const translatePath = useTranslatedPath(lang);
 			},
 		});
 
-		// Existing arrow animation code
+		// Line and arrow animations
 		const linePath = document.querySelector("#tagline-arrow-path");
 		gsap.set(linePath, { drawSVG: 0 });
 
@@ -101,33 +104,26 @@ const translatePath = useTranslatedPath(lang);
 					scrub: 1,
 				},
 			})
-			.to(
-				linePath,
-				{
-					drawSVG: "100%",
+			// Animate line fade and draw
+			.to(linePath, {
+				drawSVG: "100%",
+				opacity: 1, // Fade in the line
+				duration: 2,
+			}, "<")
+			// Animate arrow fade
+			.to("#tagline-arrow", {
+				opacity: 1, // Fade in the triangle
+				duration: 0.1,
+			}, "<")
+			// Animate arrow motion along the path
+			.to("#tagline-arrow", {
+				motionPath: {
+					path: "#tagline-arrow-path",
+					align: "#tagline-arrow-path",
+					alignOrigin: [0.5, 0.5],
+					autoRotate: 30,
 				},
-				"<",
-			)
-			.to(
-				"#tagline-arrow",
-				{
-					opacity: 1,
-					duration: 0.1,
-				},
-				"<",
-			)
-			.to(
-				"#tagline-arrow",
-				{
-					motionPath: {
-						path: "#tagline-arrow-path",
-						align: "#tagline-arrow-path",
-						alignOrigin: [0.5, 0.5],
-						autoRotate: 30,
-					},
-				},
-				0,
-			);
+			}, 0);
 	}
 
 	document.removeEventListener("DOMContentLoaded", init); // astro:page-load

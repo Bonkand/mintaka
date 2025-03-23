@@ -42,7 +42,7 @@ const faqs = [
     },
     {
         question: t("faqs.question9"),
-        answer: t("faqs.answer9"),
+        answer: t("faqs.question9"),
     },
     {
         question: t("faqs.question10"),
@@ -200,7 +200,10 @@ const faqs = [
     import { ScrollTrigger } from "gsap/ScrollTrigger";
 
     function init() {
-        if (typeof window === 'undefined') return;
+        if (typeof window === 'undefined') {
+            console.log("window is undefined");
+            return;
+        }
 
         gsap.registerPlugin(ScrollTrigger);
 
@@ -209,6 +212,7 @@ const faqs = [
         const arrow = document.querySelector("#faq-more-question-arrow");
         const contactButton = document.querySelector(".faq-contact-us-button");
 
+        console.log("Elements:", { faqSection, linePath, arrow, contactButton });
 
         if (faqSection) {
             gsap.to(faqSection, {
@@ -227,16 +231,9 @@ const faqs = [
         if (linePath && arrow && contactButton) {
             gsap.set(linePath, { drawSVG: 0 });
 
-            let otherQTl = gsap
-                .timeline({
-                    scrollTrigger: {
-                        trigger: ".faq-more-questions",
-                        start: "center 90%",
-                        end: "center top",
-                        //markers: true,
-                        toggleActions: "play none none reverse",
-                    },
-                })
+            let otherQTl = gsap.timeline(); // Create the timeline without ScrollTrigger initially
+
+            otherQTl
                 .to(".faq-more-questions .other-question-title", {
                     opacity: 1,
                     duration: 0.5,
@@ -256,6 +253,23 @@ const faqs = [
                     },
                     ">-=1.5",
                 );
+
+            ScrollTrigger.create({ // THEN create the ScrollTrigger
+                trigger: ".faq-more-questions",
+                start: "center 90%",
+                end: "center top",
+                //markers: true,
+                toggleActions: "play none none reverse",
+                animation: otherQTl, // Pass the timeline instance to the ScrollTrigger
+                onEnter: () => console.log('enter'),
+                onLeave: () => console.log('leave'),
+                onEnterBack: () => console.log('enterBack'),
+                onLeaveBack: () => console.log('leaveBack'),
+            });
+
+            console.log("Timeline created:", otherQTl);
+        } else {
+            console.log("One or more elements not found. Animation not started.");
         }
     }
 

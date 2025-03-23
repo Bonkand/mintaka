@@ -199,57 +199,64 @@ const faqs = [
     import { gsap } from "gsap";
     import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-    gsap.to(".element", { x: 100, duration: 1 });
-
     function init() {
-        gsap.registerPlugin(ScrollTrigger); // Register ScrollTrigger
+        if (typeof window === 'undefined') return;
 
-        gsap.to("#faq", {
-            scrollTrigger: {
-                trigger: "#faq",
-                start: "bottom center",
-                end: "bottom top",
-                scrub: 1,
-                markers: false,
-            },
-            "--faq-clip": "2vw",
-            "--faq-radius": "5rem",
-        });
+        gsap.registerPlugin(ScrollTrigger);
 
+        const faqSection = document.querySelector("#faq");
         const linePath = document.querySelector("#faq-more-question-path");
-        const arrow = document.querySelector("#faq-more-question-arrow"); // Select the arrow
+        const arrow = document.querySelector("#faq-more-question-arrow");
+        const contactButton = document.querySelector(".faq-contact-us-button");
 
-        gsap.set(linePath, { drawSVG: 0 });
 
-        let otherQTl = gsap
-            .timeline({
+        if (faqSection) {
+            gsap.to(faqSection, {
                 scrollTrigger: {
-                    trigger: ".faq-more-questions",
-                    start: "center 90%",
-                    end: "center top",
-                    //markers: true,
-                    toggleActions: "play none none reverse",
+                    trigger: faqSection,
+                    start: "bottom center",
+                    end: "bottom top",
+                    scrub: 1,
+                    markers: false,
                 },
-            })
-            .to(".faq-more-questions .other-question-title", {
-                opacity: 1,
-                duration: 0.5,
-            })
-            .to(
-                linePath,
-                {
-                    drawSVG: "100%",
-                    duration: 2,
-                },
-                "<",
-            )
-            .to(
-                [".faq-contact-us-button", arrow], // Include the arrow in the animation
-                {
+                "--faq-clip": "2vw",
+                "--faq-radius": "5rem",
+            });
+        }
+
+        if (linePath && arrow && contactButton) {
+            gsap.set(linePath, { drawSVG: 0 });
+
+            let otherQTl = gsap
+                .timeline({
+                    scrollTrigger: {
+                        trigger: ".faq-more-questions",
+                        start: "center 90%",
+                        end: "center top",
+                        //markers: true,
+                        toggleActions: "play none none reverse",
+                    },
+                })
+                .to(".faq-more-questions .other-question-title", {
                     opacity: 1,
-                },
-                ">-=1.5",
-            );
+                    duration: 0.5,
+                })
+                .to(
+                    linePath,
+                    {
+                        drawSVG: "100%",
+                        duration: 2,
+                    },
+                    "<",
+                )
+                .to(
+                    [contactButton, arrow],
+                    {
+                        opacity: 1,
+                    },
+                    ">-=1.5",
+                );
+        }
     }
 
     if (typeof window !== 'undefined') {

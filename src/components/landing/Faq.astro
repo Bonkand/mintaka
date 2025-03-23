@@ -202,6 +202,8 @@ const faqs = [
     gsap.to(".element", { x: 100, duration: 1 });
 
     function init() {
+        gsap.registerPlugin(ScrollTrigger); // Register ScrollTrigger
+
         gsap.to("#faq", {
             scrollTrigger: {
                 trigger: "#faq",
@@ -225,7 +227,7 @@ const faqs = [
                     trigger: ".faq-more-questions",
                     start: "center 90%",
                     end: "center top",
-                    markers: false,
+                    //markers: true,
                     toggleActions: "play none none reverse",
                 },
             })
@@ -250,6 +252,7 @@ const faqs = [
             );
     }
 
-    document.removeEventListener("DOMContentLoaded", init); // astro:page-load
-    document.addEventListener("DOMContentLoaded", init); // astro:page-load
+    if (typeof window !== 'undefined') {
+        document.addEventListener("DOMContentLoaded", init);
+    }
 </script>
